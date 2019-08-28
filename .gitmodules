@@ -1,3 +1,6 @@
 [submodule "static/rust/svd"]
 	path = static/rust/svd
 	url = https://github.com/WRansohoff/svd.git
+[submodule "static/rust/svd_reader"]
+	path = static/rust/svd_reader
+	url = https://github.com/WRansohoff/svd2json.git
