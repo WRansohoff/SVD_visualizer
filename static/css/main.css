@@ -1,0 +1,104 @@
+.main_content {
+  width: 98%;
+  height: 97%;
+  position: absolute;
+  transform: tranlsate( 0%, 0% );
+}
+
+.main_table {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.main_table_r {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.main_table_sidebar {
+  height: 100%;
+  width: 15%;
+  position: absolute;
+  border: 1px solid black;
+}
+
+.main_content_table {
+  width: 100%;
+  height: 100%;
+}
+
+.main_table_content {
+  height: 100%;
+  width: 85%;
+  transform: translateX( 17.647% );
+  position: absolute;
+}
+
+.table_top_row {
+  height: 15%;
+  width: 100%;
+  position: absolute;
+}
+
+.table_top_cell {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  border: 1px solid black;
+}
+
+.main_view_top_div {
+  font-weight: bold;
+  font-size: 36px;
+  text-align: center;
+}
+
+.table_bottom_panel {
+  height: 85%;
+  width: 100%;
+  position: absolute;
+  transform: translateY( 17.647% );
+}
+
+.table_bottom_cell {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  border: 1px solid black;
+}
+
+.device_sidebar_row {
+  display: block;
+  margin: 2px auto 2px auto;
+}
+
+.device_sidebar_name {
+  text-align: center;
+  font-weight: bold;
+  display: inline-block;
+  padding: 4px 0px 4px 0px;
+  width: 70%;
+}
+
+.sidebar_row_selected {
+  background-color: #CCCCCC;
+}
+
+.delete_device_button {
+  width: 25%;
+}
+
+.new_device_row {
+  display: block;
+  margin: 5px auto 5px auto;
+}
+
+.new_device_name {
+  width: 75%;
+}
+
+.new_device_button {
+  width: 20%;
+}
