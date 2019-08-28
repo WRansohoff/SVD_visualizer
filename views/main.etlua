@@ -1,0 +1,127 @@
+<link rel="stylesheet" type="text/css" href="static/css/main.css" />
+<script type="text/javascript" src="static/js/main.js" ></script>
+
+<script type="text/javascript">
+  update_main_view = function( device_id ) {
+    $.get( "/device_attrs/" + device_id ).done( function( data ) {
+      var new_html = "";
+      if ( data.state == "pre_upload" ) {
+        new_html +=
+          "<form action=\"/device_upload/" + device_id + "\", enctype=\"multipart/form-data\" method=\"post\"> \
+            <input type=\"file\" name=\"file\"> \
+            <input type=\"submit\" value=\"Upload\"> \
+          </form>";
+        $( "#main_view_panel" )[ 0 ].innerHTML = new_html;
+      }
+      else if ( data.state == "processing" ) {
+        new_html +=
+          "<div class=\"svd_proc_msg\"> \
+            SVD file uploaded. File size: (TODO) \
+          </div> \
+          <button id=\"svd_proc_button\" class=\"btn btn-primary svd_proc_btn\">[Re-]Start Processing</button>";
+        $( "#main_view_panel" )[ 0 ].innerHTML = new_html;
+        $( "#svd_proc_button" ).on( "click", function( e ) {
+          $( "#svd_proc_button" ).off( "click" );
+          e.target.classList.remove( "btn-primary" );
+          e.target.classList.add( "btn-secondary" );
+          e.target.innerText = "( Please wait )";
+          $.get( "/process_device/" + device_id ).done( function( data ) {
+            window.location.reload( false );
+          } ).fail( function( data ) {
+            alert( "Failed to process device file: " + JSON.parse( data ) );
+          } );
+        } );
+      }
+      else if ( data.state == "done" ) {
+        new_html += "(Fetching device JSON data, please wait...)";
+        $( "#main_view_panel" )[ 0 ].innerHTML = new_html;
+        $.get( "device_json/" + device_id ).done( function( data ) {
+          var json_html = "<div id=\"main_view_device_json\">" + JSON.stringify( data ) + "</div>";
+          $( "#main_view_panel" )[ 0 ].innerHTML = json_html;
+        } ).fail( function( data ) {
+          alert( "Error retrieving device JSON: " + JSON.parse( data ) );
+        } );
+      }
+    } );
+  }
+
+  window.onload = function() {
+    $( "#new_device_button" ).on( "click", function( e ) {
+      var new_proj_name = $( "#new_device_name" )[ 0 ].value;
+      if ( new_proj_name == "" ) {
+        alert( "Please enter a device name." );
+      }
+      else {
+        $.post( "/new_device/" + new_proj_name ).done(function(data) {
+          window.location.reload( false );
+        } ).fail(function(data) {
+          alert( "Failed to add new device. Error message:\r\n\r\n" + data.responseJSON.error );
+        } );
+      }
+    } );
+
+    var selected_id = -1;
+    <% for d in pairs( devices ) do %>
+      $( "#device_sidebar_<%= devices[d].id %>" ).on( "click", function( e ) {
+        if ( selected_id >= 0 ) {
+          $( "#device_sidebar_" + selected_id )[ 0 ].classList.remove( "sidebar_row_selected" );
+        }
+        selected_id = <%= devices[d].id %>
+        $( "#device_sidebar_" + selected_id )[ 0 ].classList.add( "sidebar_row_selected" );
+        $( "#main_view_top_bar" )[ 0 ].innerHTML = "<div class=\"main_view_top_div\"><%= devices[d].name %></div>";
+        update_main_view( <%= devices[d].id %> );
+      } );
+
+      $( "#delete_device_<%= devices[d].id %>" ).on( "click", function( e ) {
+        if ( e.target.innerText == "X" ) {
+          e.target.classList.remove( "btn-warning" );
+          e.target.classList.add( "btn-danger" );
+          e.target.innerText = "X?";
+          setTimeout( function() {
+            e.target.innerText = "X";
+            e.target.classList.remove( "btn-danger" );
+            e.target.classList.add( "btn-warning" );
+          }, 5000 );
+        }
+        else {
+          $.post( "delete_device/" + <%= devices[d].id %> ).done( function( data ) {
+            window.location.reload( false );
+          } );
+        }
+      } );
+    <% end %>
+  };
+</script>
+
+<div class="main_content">
+  <table class="main_table" cellpadding="0" cellspacing="0">
+    <tr class="main_table_r">
+      <td class="main_table_sidebar">
+        <% for d in pairs( devices ) do %>
+          <div id="device_row_<%= devices[d].id %>" class="device_sidebar_row">
+            <div id="device_sidebar_<%=devices[d].id%>" class="device_sidebar_name">
+              <%= devices[d].name %>
+            </div>
+            <button type="button" id="delete_device_<%=devices[d].id%>" class="btn btn-warning delete_device_button">X</button>
+          </div>
+        <% end %>
+        <div class="new_device_row">
+          <input type="text" id="new_device_name" class="new_device_name"/>
+          <button type="button" id="new_device_button" class="btn btn-primary new_device_button">+</button>
+        </div>
+      </td>
+      <td class="main_table_content">
+        <table class="main_content_table"" cellpadding="0" cellspacing="0">
+          <tr class="table_top_row">
+            <td id="main_view_top_bar" class="table_top_cell">
+            </td>
+          </tr>
+          <tr class="table_bottom_panel">
+            <td id="main_view_panel" class="table_bottom_cell">
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
