@@ -108,22 +108,22 @@
 }
 
 .device_view_header {
-  background-color: #CCCCCC;
+  background-color: #CCCCCC !important;
   font-weight: bold;
 }
 
 .device_periph_header {
-  background-color: #CCCCCC;
+  background-color: #CCCCCC !important;
   font-weight: bold;
 }
 
 .device_interrupt_header {
-  background-color: #CCCCCC;
+  background-color: #CCCCCC !important;
   font-weight: bold;
 }
 
 .device_register_header {
-  background-color: #CCCCCC;
+  background-color: #CCCCCC !important;
   font-weight: bold;
 }
 

@@ -1,0 +1,155 @@
+<div id="main_view_device_json" class="main_view_device_json list-group">
+  <div id="device_name" class="device_name list-group-item">
+    Name: <%= device.name %>
+  </div>
+  <div id="device_description" class="device_description list-group-item">
+    Description: <%= device.description %>
+  </div>
+  <div id="device_schema_version" class="device_schema_version list-group-item">
+    Schema version: <%= device.schema_version %>
+  </div>
+  <div id="device_version" class="device_version list-group-item">
+    Version: <%= device.version %>
+  </div>
+  <div id="device_address_unit_bits" class="device_address_unit_bits list-group-item">
+    Address Unit bits: <%= device.address_unit_bits %>
+  </div>
+  <div id="device_defaults_lg" class="list-group-item device_view_header" data-toggle="collapse" href="#device_defaults_l" aria-expanded="false" aria-controls="device_defaults_l">
+    Defaults:
+  </div>
+  <div id="device_defaults_l" class="collapse lg_indent_once">
+    <div class="list-group-item">
+      Reset value: <%= device.defaults.reset_value %>
+    </div>
+    <div class="list-group-item">
+      Reset mask: <%= device.defaults.reset_mask %>
+    </div>
+    <div class="list-group-item">
+      Size: <%= device.defaults.size %>
+    </div>
+  </div>
+  <div id="device_cpu_lg" class="list-group-item device_view_header" data-toggle="collapse" href="#device_cpu_l" aria-expanded="false" aria-controls="device_cpu_l">
+    CPU:
+  </div>
+  <div id="device_cpu_l" class="collapse lg_indent_once">
+    <div class="list-group-item">
+      Core name: <%= device.cpu.name %>
+    </div>
+    <div class="list-group-item">
+      Core revision: <%= device.cpu.revision %>
+    </div>
+    <div class="list-group-item">
+      NVIC priority bits: <%= device.cpu.nvic_priority_bits %>
+    </div>
+    <div class="list-group-item">
+      FPU present?: <%= device.cpu.fpu_present %>
+    </div>
+    <div class="list-group-item">
+      MPU present?: <%= device.cpu.mpu_present %>
+    </div>
+    <div class="list-group-item">
+      Vendor SysTick present?: <%= device.cpu.has_vendor_systick %>
+    </div>
+    <div class="list-group-item">
+      Endian-ness: <%= device.cpu.endian %>
+    </div>
+  </div>
+  <% for ind in pairs( device.peripherals ) do %>
+    <% per = device.peripherals[ ind ] %>
+    <div id="device_periph_header_<%= per.name %>" class="list-group-item device_periph_header" data-toggle="collapse" href="#device_periph_<%= per.name %>_l" aria-expanded="false" aria-controls="device_periph_<%= per.name %>_l">
+      <%= per.name %>
+    </div>
+    <div id="device_periph_<%= per.name %>_l" class="collapse lg_indent_once">
+      <div class="list-group-item">
+        Base address: <%= per.base_address %>
+      </div>
+      <% if per.derived_from then %>
+      <% else %>
+        <div class="list-group-item">
+          Peripheral group: <%= per.group_name %>
+        </div>
+        <div class="list-group-item">
+          Description: <%= per.description %>
+        </div>
+        <div id="device_address_block_header_<%= per.name %>" class="list-group-item device_view_header" data-toggle="collapse" href="#device_address_block_<%= per.name %>_l" aria-expanded="false" aria-controls="device_address_block_<%= per.name %>_l">
+          Address block:
+        </div>
+        <div id="device_address_block_<%= per.name %>_l" class="collapse lg_indent_twice">
+          <div class="list-group-item">
+            Size: <%= per.address_block.size %>
+          </div>
+          <div class="list-group-item">
+            Offset: <%= per.address_block.offset %>
+          </div>
+          <div class="list-group-item">
+            Usage: <%= per.address_block.usage %>
+          </div>
+        </div>
+      <% end %>
+      <% if #per.interrupt > 0 then %>
+        <div id="device_interrupt_header_<%= per.name %>" class="list-group-item device_interrupt_header" data-toggle="collapse" href="#device_interrupt_<%= per.name %>_l" aria-expanded="false" aria-controls="device_interrupt_<%= per.name %>_l">
+          Interrupt(s):
+        </div>
+        <div id="device_interrupt_<%= per.name %>_l" class="collapse lg_indent_twice">
+          <% for int_ind in pairs( per.interrupt ) do %>
+            <% pint = per.interrupt[ int_ind ] %>
+            <div class="list-group-item">
+              #<%= pint.value %>: <%= pint.name %> (<%= pint.description %>)
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="list-group-item">
+          Interrupts: None
+        </div>
+      <% end %>
+      <% if per.derived_from then %>
+      <% else %>
+        <div id="device_registers_header_<%= per.name %>" class="list-group-item device_view_header" data-toggle="collapse" href="#device_registers_<%= per.name %>_l" aria-expanded="false" aria-controls="device_registers_<%= per.name %>_l">
+          Register(s):
+        </div>
+        <div id="device_registers_<%= per.name %>_l" class="collapse lg_indent_twice">
+          <% for reg_ind in pairs( per.registers ) do %>
+            <% reg = per.registers[ reg_ind ].Register %>
+            <div id="device_register_header_<%= per.name %><%= reg.Single.name %>" class="list-group-item device_register_header" data-toggle="collapse" href="#device_register_<%= per.name %><%= reg.Single.name %>_l" aria-expanded="false" aria-controls="device_register_<%= per.name %><%= reg.Single.name %>_l">
+              <%= reg.Single.name %>
+            </div>
+            <div id="device_register_<%= per.name %><%= reg.Single.name %>_l" class="collapse lg_indent_thrice">
+              <div class="list-group-item">
+                Address offset: <%= reg.Single.address_offset %>"
+              </div>
+              <div class="list-group-item">
+                Reset value: <%= reg.Single.reset_value %>"
+              </div>
+              <div class="list-group-item">
+                Size: <%= reg.Single.size %>"
+              </div>
+              <div class="list-group-item">
+                Access: <%= reg.Single.access %>"
+              </div>
+              <div class="list-group-item">
+                Description: <%= reg.Single.description %>"
+              </div>
+              <div id="device_register_fields_header_<%= per.name %><%= reg.Single.name %>" class="list-group-item device_view_header" data-toggle="collapse" href="#device_register_fields_<%= per.name %><%= reg.Single.name %>_l" aria-expanded="false" aria-controls="device_register_fields_<%= per.name %><%= reg.Single.name %>_l">
+                Bitfields:
+              </div>
+              <div id="device_register_fields_<%= per.name %><%= reg.Single.name %>_l" class="collapse lg_indent_quad">
+                <% for field in pairs( reg.Single.fields ) do %>
+                  <% reg_f = reg.Single.fields[ field ] %>
+                  <% if reg_f.bit_range.width > 1 then %>
+                    <% offset_str = tostring( reg_f.bit_range.offset ) .. ":" .. tostring( reg_f.bit_range.offset + reg_f.bit_range.width - 1 ) %>
+                  <% else %>
+                    <% offset_str = tostring( reg_f.bit_range.offset ) %>
+                  <% end %>
+                  <div class="list-group-item">
+                    <b>[<%= offset_str %>] <i><%= reg_f.name %></i></b>: <%= reg_f.description %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

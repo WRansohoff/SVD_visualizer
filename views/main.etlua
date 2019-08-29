@@ -36,87 +36,8 @@
       else if ( data.state == "done" ) {
         new_html += "(Fetching device JSON data, please wait...)";
         $( "#main_view_panel" )[ 0 ].innerHTML = new_html;
-        $.get( "device_json/" + device_id ).done( function( data ) {
-          var json_html = "<div id=\"main_view_device_json\" class=\"main_view_device_json list-group\"> \
-            <div id=\"device_name\" class=\"device_name list-group-item\">Name: " + data.name + "</div> \
-            <div id=\"device_description\" class=\"device_description list-group-item\">Description: " + data.description + "</div> \
-            <div id=\"device_schema_version\" class=\"list-group-item device_schema_version\">Schema version: " + data.schema_version + "</div> \
-            <div id=\"device_version\" class=\"device_version list-group-item\">Version: " + data.version + "</div> \
-            <div id=\"device_address_unit_bits\" class=\"device_address_unit_bits list-group-item\">Address unit bits: " + data.address_unit_bits + "</div> \
-            <div id=\"device_defaults_lg\" class=\"list-group-item device_view_header\" data-toggle=\"collapse\" href=\"#device_defaults_l\" aria-expanded=\"false\" aria-controls=\"device_defaults_l\">Defaults:</div> \
-            <div id=\"device_defaults_l\" class=\"collapse lg_indent_once\"> \
-              <div class=\"list-group-item\">Reset value: " + data.defaults.reset_value + "</div> \
-              <div class=\"list-group-item\">Reset mask: " + data.defaults.reset_mask + "</div> \
-              <div class=\"list-group-item\">Size: " + data.defaults.size + "</div> \
-            </div> \
-            <div id=\"device_cpu_lg\" class=\"list-group-item device_view_header\" data-toggle=\"collapse\" href=\"#device_cpu_l\" aria-expanded=\"false\" aria-controls=\"device_cpu_l\">CPU:</div> \
-            <div id=\"device_cpu_l\" class=\"collapse lg_indent_once\"> \
-              <div class=\"list-group-item\">Core name: " + data.cpu.name + "</div> \
-              <div class=\"list-group-item\">Core revision: " + data.cpu.revision + "</div> \
-              <div class=\"list-group-item\">NVIC priority bits: " + data.cpu.nvic_priority_bits + "</div> \
-              <div class=\"list-group-item\">FPU present?: " + data.cpu.fpu_present + "</div> \
-              <div class=\"list-group-item\">MPU present?: " + data.cpu.mpu_present + "</div> \
-              <div class=\"list-group-item\">Vendor SysTick present?: " + data.cpu.has_vendor_systick + "</div> \
-              <div class=\"list-group-item\">Endian-ness: " + data.cpu.endian + "</div> \
-            </div>";
-            for ( ind in data.peripherals ) {
-              var per = data.peripherals[ ind ];
-              json_html += "<div id=\"device_periph_header_" + per.name + "\" class=\"list-group-item device_periph_header\" data-toggle=\"collapse\" href=\"#device_periph_" + per.name + "_l\" aria-expanded=\"false\" aria-controls=\"device_periph_" + per.name + "_l\">" + per.name + "</div> \
-              <div id=\"device_periph_" + per.name + "_l\" class=\"collapse lg_indent_once\"> \
-                <div class=\"list-group-item\">Base address: " + per.base_address + "</div>";
-              if ( per.derived_from ) {
-              } else {
-                json_html += "<div class=\"list-group-item\">Peripheral group: " + per.group_name + "</div> \
-                <div class=\"list-group-item\">Description: " + per.description + "</div> \
-                <div id=\"device_address_block_header_" + per.name + "\" class=\"list-group-item device_view_header\" data-toggle=\"collapse\" href=\"#device_address_block_" + per.name + "_l\" aria-expanded=\"false\" aria-controls=\"device_address_block_" + per.name + "_l\">Address block:</div> \
-                <div id=\"device_address_block_" + per.name + "_l\" class=\"collapse lg_indent_twice\"> \
-                  <div class=\"list-group-item\">Size: " + per.address_block.size + "</div> \
-                  <div class=\"list-group-item\">Offset: " + per.address_block.offset + "</div> \
-                  <div class=\"list-group-item\">Usage: " + per.address_block.usage + "</div> \
-                </div>";
-              }
-              if ( per.interrupt[ 0 ]) {
-                json_html += "<div id=\"device_interrupt_header_" + per.name + "\" class=\"list-group-item device_interrupt_header\" data-toggle=\"collapse\" href=\"#device_interrupt_" + per.name + "_l\" aria-expanded=\"false\" aria-controls=\"device_interrupt_" + per.name + "_l\">Interrupt(s):</div> \
-                <div id=\"device_interrupt_" + per.name + "_l\" class=\"collapse lg_indent_twice\">";
-                for ( int_ind in per.interrupt ) {
-                  var inter = per.interrupt[ int_ind ];
-                  json_html += "<div class=\"list-group-item\">#" + inter.value + ": " + inter.name + " (" + inter.description + ")</div>";
-                }
-                json_html += "</div>";
-              }
-              else {
-                json_html += "<div class=\"list-group-item\">Interrupts: None</div>";
-              }
-              json_html += "<div id=\"device_registers_header_" + per.name + "\" class=\"list-group-item device_view_header\" data-toggle=\"collapse\" href=\"#device_registers_" + per.name + "_l\" aria-expanded=\"false\" aria-controls=\"device_registers_" + per.name + "_l\">Register(s):</div> \
-              <div id=\"device_registers_" + per.name + "_l\" class=\"collapse lg_indent_twice\">";
-              for ( reg_ind in per.registers ) {
-                var reg = per.registers[ reg_ind ].Register;
-                json_html += "<div id=\"device_register_header_" + per.name + reg.Single.name + "\" class=\"list-group-item device_register_header\" data-toggle=\"collapse\" href=\"#device_register_" + per.name + reg.Single.name + "_l\" aria-expanded=\"false\" aria-controls=\"device_register_" + per.name + reg.Single.name + "_l\">" + reg.Single.name + ":</div> \
-                <div id=\"device_register_" + per.name + reg.Single.name + "_l\" class=\"collapse lg_indent_thrice\"> \
-                <div class=\"list-group-item\">Address offset: " + reg.Single.address_offset + "</div> \
-                <div class=\"list-group-item\">Reset value: " + reg.Single.reset_value + "</div> \
-                <div class=\"list-group-item\">Size: " + reg.Single.size + "</div> \
-                <div class=\"list-group-item\">Access: " + reg.Single.access + "</div> \
-                <div class=\"list-group-item\">Description: " + reg.Single.description + "</div> \
-                <div id=\"device_register_fields_header_" + per.name + reg.Single.name + "\" class=\"list-group-item device_view_header\" data-toggle=\"collapse\" href=\"#device_register_fields_" + per.name + reg.Single.name + "_l\" aria-expanded=\"false\" aria-controls=\"device_register_fields_" + per.name + reg.Single.name + "_l\">Bitfields:</div> \
-                <div id=\"device_register_fields_" + per.name + reg.Single.name + "_l\" class=\"collapse lg_indent_quad\">";
-                for ( field in reg.Single.fields ) {
-                  var reg_f = reg.Single.fields[ field ];
-                  var offset_str = reg_f.bit_range.offset.toString();
-                  if ( reg_f.bit_range.width > 1 ) {
-                    offset_str = reg_f.bit_range.offset.toString() + ":" + ( reg_f.bit_range.offset + reg_f.bit_range.width - 1 ).toString();
-                  }
-                  json_html += "<div class=\"list-group-item\"><b>[" + offset_str + "] <i>" + reg_f.name + "</i></b>: " + reg_f.description + "</div>";
-                }
-                json_html += "</div></div>";
-              }
-              json_html += "</div></div>";
-            }
-            //json_html += JSON.stringify( data.peripherals, null, 2 );
-            json_html += "</div>";
-          $( "#main_view_panel" )[ 0 ].innerHTML = json_html;
-        } ).fail( function( data ) {
-          alert( "Error retrieving device JSON: " + JSON.parse( data ) );
+        $.get( "device_html/" + device_id ).done( function( data ) {
+          $( "#main_view_panel" )[ 0 ].innerHTML = data;
         } );
       }
     } );
