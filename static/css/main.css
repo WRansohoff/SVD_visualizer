@@ -67,6 +67,7 @@
   width: 100%;
   position: absolute;
   border: 1px solid black;
+  overflow: scroll;
 }
 
 .device_sidebar_row {
@@ -101,4 +102,47 @@
 
 .new_device_button {
   width: 20%;
+}
+
+.main_view_device_json {
+}
+
+.device_view_header {
+  background-color: #CCCCCC;
+  font-weight: bold;
+}
+
+.device_periph_header {
+  background-color: #CCCCCC;
+  font-weight: bold;
+}
+
+.device_interrupt_header {
+  background-color: #CCCCCC;
+  font-weight: bold;
+}
+
+.device_register_header {
+  background-color: #CCCCCC;
+  font-weight: bold;
+}
+
+.lg_indent_once {
+  padding-left: 25px;
+}
+
+.lg_indent_twice {
+  padding-left: 40px;
+}
+
+.lg_indent_thrice {
+  padding-left: 60px;
+}
+
+.lg_indent_quad {
+  padding-left: 80px;
+}
+
+.lg_indent_fifth {
+  padding-left: 100px;
 }
