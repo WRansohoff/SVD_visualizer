@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
   // TODO: Move this ugly block of javascript into an etlua template.
-  update_main_view = function( device_id ) {
+  update_main_view = function( device_id, viz_type ) {
     $.get( "/device_attrs/" + device_id ).done( function( data ) {
       var new_html = "";
       if ( data.state == "pre_upload" ) {
@@ -34,11 +34,21 @@
         } );
       }
       else if ( data.state == "done" ) {
-        new_html += "(Fetching device JSON data, please wait...)";
-        $( "#main_view_panel" )[ 0 ].innerHTML = new_html;
-        $.get( "device_html/" + device_id ).done( function( data ) {
-          $( "#main_view_panel" )[ 0 ].innerHTML = data;
-        } );
+        if ( viz_type == "tree" ) {
+          new_html += "(Fetching device JSON data, please wait...)";
+          $( "#main_view_panel" )[ 0 ].innerHTML = new_html;
+          $.get( "device_tree_html/" + device_id ).done( function( data ) {
+            $( "#main_view_panel" )[ 0 ].innerHTML = data;
+          } );
+        }
+        else if ( viz_type == "grid" ) {
+          $.get( "device_grid_html/" + device_id ).done( function( data ) {
+            $( "#main_view_panel" )[ 0 ].innerHTML = data;
+          } );
+        }
+        else {
+          $( "#main_view_panel" )[ 0 ].innerHTML = "Unrecognized visualization type - if you see this, it's a bug :(";
+        }
       }
     } );
   }
@@ -66,8 +76,26 @@
         }
         selected_id = <%= devices[d].id %>
         $( "#device_sidebar_" + selected_id )[ 0 ].classList.add( "sidebar_row_selected" );
-        $( "#main_view_top_bar" )[ 0 ].innerHTML = "<div class=\"main_view_top_div\"><%= devices[d].name %></div>";
-        update_main_view( <%= devices[d].id %> );
+        $( "#main_view_top_bar" )[ 0 ].innerHTML = "<div class=\"main_view_top_div\"> \
+          <%= devices[d].name %>: \
+          <button type=\"button\" id=\"device_tree_view_button\" class=\"btn btn-secondary top_bar_button\">Tree View</button> \
+          <button type=\"button\" id=\"device_grid_view_button\" class=\"btn btn-secondary top_bar_button\">Grid View</button> \
+        </div>";
+        $( "#main_view_panel" )[ 0 ].innerHTML = "Please select a visualization type above."
+        $( "#device_tree_view_button" ).on( "click", function( e ) {
+          $( "#device_grid_view_button" )[ 0 ].classList.remove( "btn-primary" );
+          $( "#device_grid_view_button" )[ 0 ].classList.add( "btn-secondary" );
+          e.target.classList.remove( "btn-secondary" );
+          e.target.classList.add( "btn-primary" );
+          update_main_view( <%= devices[d].id %>, "tree" );
+        } );
+        $( "#device_grid_view_button" ).on( "click", function( e ) {
+          $( "#device_tree_view_button" )[ 0 ].classList.remove( "btn-primary" );
+          $( "#device_tree_view_button" )[ 0 ].classList.add( "btn-secondary" );
+          e.target.classList.remove( "btn-secondary" );
+          e.target.classList.add( "btn-primary" );
+          update_main_view( <%= devices[d].id %>, "grid" );
+        } );
       } );
 
       $( "#delete_device_<%= devices[d].id %>" ).on( "click", function( e ) {

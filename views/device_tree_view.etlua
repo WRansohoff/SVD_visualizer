@@ -19,10 +19,10 @@
   </div>
   <div id="device_defaults_l" class="collapse lg_indent_once">
     <div class="list-group-item">
-      Reset value: <%= device.defaults.reset_value %>
+      Reset value: <%= "0x" .. string.format( "%08X", device.defaults.reset_value ) %>
     </div>
     <div class="list-group-item">
-      Reset mask: <%= device.defaults.reset_mask %>
+      Reset mask: <%= "0x" .. string.format( "%08X", device.defaults.reset_mask ) %>
     </div>
     <div class="list-group-item">
       Size: <%= device.defaults.size %>
@@ -116,19 +116,19 @@
             </div>
             <div id="device_register_<%= per.name %><%= reg.Single.name %>_l" class="collapse lg_indent_thrice">
               <div class="list-group-item">
-                Address offset: <%= reg.Single.address_offset %>"
+                Address offset: <%= reg.Single.address_offset %>
               </div>
               <div class="list-group-item">
-                Reset value: <%= reg.Single.reset_value %>"
+                Reset value: <%= reg.Single.reset_value %>
               </div>
               <div class="list-group-item">
-                Size: <%= reg.Single.size %>"
+                Size: <%= reg.Single.size %>
               </div>
               <div class="list-group-item">
-                Access: <%= reg.Single.access %>"
+                Access: <%= reg.Single.access %>
               </div>
               <div class="list-group-item">
-                Description: <%= reg.Single.description %>"
+                Description: <%= reg.Single.description %>
               </div>
               <div id="device_register_fields_header_<%= per.name %><%= reg.Single.name %>" class="list-group-item device_view_header" data-toggle="collapse" href="#device_register_fields_<%= per.name %><%= reg.Single.name %>_l" aria-expanded="false" aria-controls="device_register_fields_<%= per.name %><%= reg.Single.name %>_l">
                 Bitfields:
