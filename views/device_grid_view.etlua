@@ -66,7 +66,7 @@
               <% for reg_ind in pairs( per.registers ) do %>
                 <% reg = per.registers[ reg_ind ].Register %>
                 <tr id="device_grid_periph_tr_<%= per.name %>_<%= reg.Single.name %>" class="device_grid_periph_tr">
-                  <td id="device_grid_periph_td_<%= per.name %>_<%= reg.Single.name %>_name" class="device_grid_periph_td_name" data-toggle="tooltip" data-placement="top" data-html="true" data-container="body" title="Description: <%= reg.Single.description %>">
+                  <td id="device_grid_periph_td_<%= per.name %>_<%= reg.Single.name %>_name" class="device_grid_periph_td_name" data-toggle="tooltip" data-placement="top" data-html="true" data-container="body" title="Description: <%= reg.Single.description %><br/>Reset value: <%= '0x' .. string.format( '%08X', reg.Single.reset_value ) %>">
                     <%= reg.Single.name %>
                     <br/>
                     <% if reg.Single.address_offset > 255 then %>
@@ -77,68 +77,25 @@
                   </td>
                   <td id="device_grid_periph_td_<%= per.name %>_<%= reg.Single.name %>_bits" class="device_grid_periph_td">
                     <table id="device_grid_regbits_table_<%= per.name %>_<%= reg.Single.name %>" class="device_grid_regbits_table" cellpadding="0" cellspacing="0">
-                      <tr class="device_grid_regbits_trh">
-                        <!-- TODO: do I really have to iterate over the bitfield array 32 times? -->
-                        <!-- It shouldn't matter since there are <32 elements, but it feels inefficient. -->
-                        <!-- Anyways, I should re-do the algorithm to merge 'Reserved' fields. -->
-                        <% is_32b_reg = false %>
-                        <% for i = 0,15 do %>
-                          <% found_bitfield = false %>
-                          <% for bit_ind in pairs( reg.Single.fields ) do %>
-                            <% field = reg.Single.fields[ bit_ind ] %>
-                            <% field_min = field.bit_range.offset %>
-                            <% field_ext = field_min + field.bit_range.width %>
-                            <% if i == field_min then %>
-                              <% if field.access then %>
-                                <% f_access = field.access %>
-                              <% else %>
-                                <% f_access = reg.Single.access %>
-                              <% end %>
-                              <td class="device_grid_reg_desc_td" colspan="<%= field_ext - field_min %>" data-toggle="tooltip" data-placement="auto" data-html="true" data-container="body" title="<b><%= field.description %></b><br/><%= f_access %>">
-                                <%= field.name %>
-                              </td>
-                            <% end %>
-                            <% if i >= field_min and i < field_ext then %>
-                              <% found_bitfield = true %>
-                            <% end %>
-                            <% if field_ext > 16 then %>
-                              <% is_32b_reg = true %>
-                            <% end %>
-                          <% end %>
-                          <% if not found_bitfield then %>
-                            <td class="device_grid_reg_desc_reserved" data-toggle="tooltip" data-placement="auto" data-html="true" data-container="body" title="<b>Reserved</b>">R</td>
-                          <% end %>
+                      <% is_32b_reg = false %>
+                      <% for bit_ind in pairs( reg.Single.fields ) do %>
+                        <% field = reg.Single.fields[ bit_ind ] %>
+                        <% if ( field.bit_range.offset + field.bit_range.width ) > 16 then %>
+                          <% is_32b_reg = true %>
                         <% end %>
-                      </tr>
-                      <tr class="device_grid_regbits_tr">
-                        <td class="device_grid_reg_bit_td">0</td>
-                        <td class="device_grid_reg_bit_td">1</td>
-                        <td class="device_grid_reg_bit_td">2</td>
-                        <td class="device_grid_reg_bit_td">3</td>
-                        <td class="device_grid_reg_bit_td">4</td>
-                        <td class="device_grid_reg_bit_td">5</td>
-                        <td class="device_grid_reg_bit_td">6</td>
-                        <td class="device_grid_reg_bit_td">7</td>
-                        <td class="device_grid_reg_bit_td">8</td>
-                        <td class="device_grid_reg_bit_td">9</td>
-                        <td class="device_grid_reg_bit_td">10</td>
-                        <td class="device_grid_reg_bit_td">11</td>
-                        <td class="device_grid_reg_bit_td">12</td>
-                        <td class="device_grid_reg_bit_td">13</td>
-                        <td class="device_grid_reg_bit_td">14</td>
-                        <td class="device_grid_reg_bit_td">15</td>
-                      </tr>
-                      <!-- Ditto the above TODOs, plus one for this code duplication. -->
-                      <!-- But many registers are 16-bit, and this fits better. -->
+                      <% end %>
+                      <!-- TODO: do I really have to iterate over the bitfield array 32 times? -->
+                      <!-- It shouldn't matter since there are <32 elements, but it feels inefficient. -->
+                      <!-- Anyways, I should re-do the algorithm to merge 'Reserved' fields. -->
                       <% if is_32b_reg then %>
                         <tr class="device_grid_regbits_trh">
-                          <% for i = 16,31 do %>
+                          <% for i = 0,15 do %>
                             <% found_bitfield = false %>
                             <% for bit_ind in pairs( reg.Single.fields ) do %>
                               <% field = reg.Single.fields[ bit_ind ] %>
                               <% field_min = field.bit_range.offset %>
                               <% field_ext = field_min + field.bit_range.width %>
-                              <% if i == field_min then %>
+                              <% if ( 31 - i ) == field_min then %>
                                 <% if field.access then %>
                                   <% f_access = field.access %>
                                 <% else %>
@@ -147,7 +104,7 @@
                                 <td class="device_grid_reg_desc_td" colspan="<%= field_ext - field_min %>" data-toggle="tooltip" data-placement="auto" data-html="true" data-container="body" title="<b><%= field.description %></b><br/><%= f_access %>">
                                   <%= field.name %>
                                 </td>
-                              <% elseif i == 16 and i > field_min and i < field_ext then %>
+                              <% elseif ( 31 - i ) == 16 and ( 31 - i ) > field_min and ( 31 - i ) < field_ext then %>
                                 <% if field.access then %>
                                   <% f_access = field.access %>
                                 <% else %>
@@ -157,7 +114,7 @@
                                   <%= field.name %>
                                 </td>
                               <% end %>
-                              <% if i >= field_min and i < field_ext then %>
+                              <% if ( 31 - i ) >= field_min and ( 31 - i ) < field_ext then %>
                                 <% found_bitfield = true %>
                               <% end %>
                             <% end %>
@@ -167,24 +124,52 @@
                           <% end %>
                         </tr>
                         <tr class="device_grid_regbits_tr">
-                          <td class="device_grid_reg_bit_td">16</td>
-                          <td class="device_grid_reg_bit_td">17</td>
-                          <td class="device_grid_reg_bit_td">18</td>
-                          <td class="device_grid_reg_bit_td">19</td>
-                          <td class="device_grid_reg_bit_td">20</td>
-                          <td class="device_grid_reg_bit_td">21</td>
-                          <td class="device_grid_reg_bit_td">22</td>
-                          <td class="device_grid_reg_bit_td">23</td>
-                          <td class="device_grid_reg_bit_td">24</td>
-                          <td class="device_grid_reg_bit_td">25</td>
-                          <td class="device_grid_reg_bit_td">26</td>
-                          <td class="device_grid_reg_bit_td">27</td>
-                          <td class="device_grid_reg_bit_td">28</td>
-                          <td class="device_grid_reg_bit_td">29</td>
-                          <td class="device_grid_reg_bit_td">30</td>
-                          <td class="device_grid_reg_bit_td">31</td>
+                          <% for i = 0,15 do %>
+                            <% if bit32.band( bit32.arshift( 1, -( 31 - i ) ), reg.Single.reset_value ) ~= 0 then %>
+                              <td class="device_grid_reg_bit_td device_grid_reg_reset_on"><%= ( 31 - i ) %></td>
+                            <% else %>
+                              <td class="device_grid_reg_bit_td device_grid_reg_reset_off"><%= ( 31 - i ) %></td>
+                            <% end %>
+                          <% end %>
                         </tr>
                       <% end %>
+                      <tr class="device_grid_regbits_trh">
+                        <!-- Ditto the above TODOs, plus one for this code duplication. -->
+                        <!-- But many registers are 16-bit, and this fits better. -->
+                        <% for i = 0,15 do %>
+                          <% found_bitfield = false %>
+                          <% for bit_ind in pairs( reg.Single.fields ) do %>
+                            <% field = reg.Single.fields[ bit_ind ] %>
+                            <% field_min = field.bit_range.offset %>
+                            <% field_ext = field_min + field.bit_range.width %>
+                            <% if ( 15 - i ) == field_min then %>
+                              <% if field.access then %>
+                                <% f_access = field.access %>
+                              <% else %>
+                                <% f_access = reg.Single.access %>
+                              <% end %>
+                              <td class="device_grid_reg_desc_td" colspan="<%= field_ext - field_min %>" data-toggle="tooltip" data-placement="auto" data-html="true" data-container="body" title="<b><%= field.description %></b><br/><%= f_access %>">
+                                <%= field.name %>
+                              </td>
+                            <% end %>
+                            <% if ( 15 - i ) >= field_min and ( 15 - i ) < field_ext then %>
+                              <% found_bitfield = true %>
+                            <% end %>
+                          <% end %>
+                          <% if not found_bitfield then %>
+                            <td class="device_grid_reg_desc_reserved" data-toggle="tooltip" data-placement="auto" data-html="true" data-container="body" title="<b>Reserved</b>">R</td>
+                          <% end %>
+                        <% end %>
+                      </tr>
+                      <tr class="device_grid_regbits_tr">
+                        <% for i = 0,15 do %>
+                          <% if bit32.band( bit32.arshift( 1, -( 15 - i ) ), reg.Single.reset_value ) ~= 0 then %>
+                            <td class="device_grid_reg_bit_td device_grid_reg_reset_on"><%= ( 15 - i ) %></td>
+                          <% else %>
+                            <td class="device_grid_reg_bit_td device_grid_reg_reset_off"><%= ( 15 - i ) %></td>
+                          <% end %>
+                        <% end %>
+                      </tr>
                     </table>
                   </td>
                 </tr>

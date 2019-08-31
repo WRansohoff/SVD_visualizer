@@ -1,6 +1,8 @@
 -- Required Lua/Lapis includes
 local lapis = require("lapis")
 local config = require("lapis.config").get()
+-- Import bit32 library globally for use in etlua templates.
+bit32 = require("bit32")
 -- Utilities
 local futil = require("modules/file_util")
 -- 3rd-party

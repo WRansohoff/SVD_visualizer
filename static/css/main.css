@@ -257,3 +257,11 @@
   padding: 0px 2px 0px 2px;
   border: 2px solid blue;
 }
+
+.device_grid_reg_reset_off {
+  background-color: fuchsia;
+}
+
+.device_grid_reg_reset_on {
+  background-color: aquamarine;
+}
