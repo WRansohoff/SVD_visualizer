@@ -195,7 +195,7 @@
   font-weight: bold;
   font-size: 18px;
   border-top: 1px solid grey;
-  padding-top: 5px;
+  padding: 5px 0px 5px 0px;
 }
 
 .device_grid_periph_container {
@@ -211,4 +211,49 @@
 }
 
 .device_grid_periph_table {
+  border-collapse: separate;
+  border-spacing: 0px 10px;
+  overflow: scroll;
+}
+
+.device_grid_periph_tr {
+}
+
+.device_grid_periph_td {
+}
+
+.device_grid_periph_td_name {
+  text-align: center;
+  font-weight: bold;
+  padding: 0px 4px 0px 4px;
+  border: 2px solid blue;
+}
+
+.device_grid_regbits_table {
+}
+
+.device_grid_regbits_trh {
+  font-weight: bold;
+}
+
+.device_grid_regbits_tr {
+}
+
+.device_grid_reg_bit_td {
+  text-align: center;
+  padding: 0px 2px 0px 2px;
+  border: 1px solid grey;
+}
+
+.device_grid_reg_desc_td {
+  text-align: center;
+  padding: 0px 2px 0px 2px;
+  border: 2px solid blue;
+}
+
+.device_grid_reg_desc_reserved {
+  text-align: center;
+  color: red;
+  padding: 0px 2px 0px 2px;
+  border: 2px solid blue;
 }
