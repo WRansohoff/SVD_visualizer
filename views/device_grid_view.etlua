@@ -148,7 +148,12 @@
                               <% else %>
                                 <% f_access = reg.Single.access %>
                               <% end %>
-                              <td class="device_grid_reg_desc_td" colspan="<%= field_ext - field_min %>" data-toggle="tooltip" data-placement="auto" data-html="true" data-container="body" title="<b><%= field.description %></b><br/><%= f_access %>">
+                              <% if field_ext <= 16 then %>
+                                <% col_w = field_ext - field_min %>
+                              <% else %>
+                                <% col_w = 16 - field_min %>
+                              <% end %>
+                              <td class="device_grid_reg_desc_td" colspan="<%= col_w %>" data-toggle="tooltip" data-placement="auto" data-html="true" data-container="body" title="<b><%= field.description %></b><br/><%= f_access %>">
                                 <%= field.name %>
                               </td>
                             <% end %>
