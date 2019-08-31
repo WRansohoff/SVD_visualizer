@@ -128,9 +128,11 @@
               <div class="list-group-item">
                 Size: <%= reg.Single.size %>
               </div>
-              <div class="list-group-item">
-                Access: <%= reg.Single.access %>
-              </div>
+              <% if reg.Single.access then %>
+                <div class="list-group-item">
+                  Access: <%= reg.Single.access %>
+                </div>
+              <% end %>
               <div class="list-group-item">
                 Description: <%= reg.Single.description %>
               </div>
@@ -146,7 +148,7 @@
                     <% offset_str = tostring( reg_f.bit_range.offset ) %>
                   <% end %>
                   <div class="list-group-item">
-                    <b>[<%= offset_str %>] <i><%= reg_f.name %></i></b>: <%= reg_f.description %>
+                    <b>[<%= offset_str %>] <i><%= reg_f.name %></i></b>: <%= reg_f.description %><% if not reg.Single.access then %> (<%= reg_f.access %>)<% end %>
                   </div>
                 <% end %>
               </div>
