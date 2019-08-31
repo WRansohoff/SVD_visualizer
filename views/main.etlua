@@ -47,12 +47,18 @@
               $( "[data-toggle=\"tooltip\"]" ).tooltip();
             } );
             $( ".device_grid_periph_button" ).on( "click", function( e ) {
+              var should_change = false;
+              if ( e.target.classList.contains( "btn-info" ) ) {
+                should_change = true;
+              }
               $( ".device_grid_periph_button" ).each( function() {
                 $( this ).removeClass( "btn-success" );
                 $( this ).addClass( "btn-info" );
               } );
-              e.target.classList.remove( "btn-info" );
-              e.target.classList.add( "btn-success" );
+              if ( should_change ) {
+                e.target.classList.remove( "btn-info" );
+                e.target.classList.add( "btn-success" );
+              }
             } );
             $( ".collapse" ).on( "show.bs.collapse", function() {
               $( ".collapse.in" ).each( function() {
