@@ -190,6 +190,14 @@
   border-top: 1px solid grey;
 }
 
+.device_periph_banner {
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  border-top: 1px solid grey;
+  padding-top: 5px;
+}
+
 .device_grid_periph_container {
   display: flow;
   text-align: center;

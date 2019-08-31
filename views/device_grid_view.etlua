@@ -1,8 +1,7 @@
 <div id="main_view_device_json" class="main_view_device_json">
   <div id="device_grid_notice" class="device_grid_notice">
     (Hover over areas with 
-    <span class="hoverable_element" data-toggle="tooltip" data-placement="bottom" title="Just like that :)">
-      blue outlines
+    <span class="hoverable_element" data-toggle="tooltip" data-placement="bottom" title="Just like that :)"> blue outlines
     </span>
     &nbsp;&nbsp;for more information.)
   </div>
@@ -10,7 +9,7 @@
   <table id="device_basics_table" class="device_basics_table" cellpadding="0" cellspacing="0">
     <tr id="device_basics_table_row">
       <td id="device_grid_name_cell" class="device_grid_basics_cell text-right">
-        <span class="device_grid_name_outline hoverable_element" data-toggle="tooltip" data-placement="bottom" data-html="true" title="Description: <%= device.description %><br/>Address unit bits: <%= device.address_unit_bits %><br/>Schema version: <%= device.schema_version %><br/>Version: <%= device.version %><br/>">
+        <span class="device_grid_name_outline hoverable_element" data-toggle="tooltip" data-placement="bottom" data-html="true" title="Description: <%= device.description %><br/>Address unit bits: <%= device.address_unit_bits %><br/>Schema version: <%= device.schema_version %><br/>Version: <%= device.version %>">
           Name: 
           <span id="device_name" class="device_grid_attr">
             <%= device.name %>
@@ -18,7 +17,7 @@
         </span>
       </td>
       <td id="device_grid_cpu_cell" class="device_grid_basics_cell text-center">
-        <span class="device_grid_cpu_outline hoverable_element" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<b>TODO</b>">
+        <span class="device_grid_cpu_outline hoverable_element" data-toggle="tooltip" data-placement="bottom" data-html="true" title="NVIC priority bits: <%= device.cpu.nvic_priority_bits %><br/>FPU present?: <%= device.cpu.fpu_present %><br/>MPU present?: <%= device.cpu.mpu_present %><br/>Vendor SysTick?: <%= device.cpu.has_vendor_systick %><br/>Endian-ness: <%= device.cpu.endian %>">
           CPU: 
           <span id="device_cpu" class="device_grid_attr">
             <%= device.cpu.name %> (<%= device.cpu.revision %>)
@@ -26,7 +25,7 @@
         </span>
       </td>
       <td id="device_grid_defaults_cell" class="device_grid_basics_cell text-left">
-        <span class="device_grid_defaults_outline hoverable_element" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<i>TODO</i>">
+        <span class="device_grid_defaults_outline hoverable_element" data-toggle="tooltip" data-placement="bottom" data-html="true" title="Size: <%= device.defaults.size %><br/>Reset value: <%= "0x" .. string.format( "%08X", device.defaults.reset_value ) %><br/>Reset mask: <%= "0x" .. string.format( "%08X", device.defaults.reset_mask ) %>">
           <span id="device_defaults" class="device_grid_attr">
             Register defaults
           </span>
@@ -49,10 +48,30 @@
     <div id="device_grid_periph_show" class="device_grid_periph_show">
       <% for ind in pairs( device.peripherals ) do %>
         <% per = device.peripherals[ ind ] %>
+        <% if per.derived_from then %>
+          <% periph_hover_str = "Base address: 0x" .. string.format( "%08X", per.base_address ) %>
+        <% else %>
+          <% periph_hover_str = "Base address: 0x" .. string.format( "%08X", per.base_address ) .. "<br/>Address block size: " .. per.address_block.size .. "<br/>Address block offset: " .. per.address_block.offset .. "<br/>Peripheral group: " .. per.group_name .. "<br/>Description: " .. per.description %>
+        <% end %>
         <div id="device_grid_periph_collapse_<%= per.name %>" class="device_grid_periph_collapse collapse" role="tabpanel">
-          <table id="device_grid_periph_table_<%= per.name %>" class="device_grid_periph_table">
-          </table>
-          <b><%= per.name %></b>
+          <div class="device_periph_banner">
+            <span class="hoverable_element" data-toggle="tooltip" data-placement="top" data-html="true" title="<%= periph_hover_str %>">
+              <%= per.name %>:
+            </span>
+          </div>
+          <% if per.derived_from then %>
+          <% else %>
+            <table id="device_grid_periph_table_<%= per.name %>" class="device_grid_periph_table">
+              <% for reg_ind in pairs( per.registers ) do %>
+                <% reg = per.registers[ reg_ind ].Register %>
+                <tr id="device_grid_periph_tr_<%= per.name %>_<%= reg.Single.name %>">
+                  <td id="device_grid_periph_td_<%= per.name %>_<%= reg.Single.name %>_name">
+                    <b><%= reg.Single.name %></b>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+          <% end %>
         </div>
       <% end %>
     </div>
