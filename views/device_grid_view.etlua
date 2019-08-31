@@ -1,1 +1,18 @@
-(Grid view TODO)
+<div id="main_view_device_json" class="main_view_device_json">
+  <div id="device_grid_notice" class="device_grid_notice">
+    (Hover over areas with 
+    <span class="hoverable_element" data-toggle="tooltip" data-placement="bottom" title="Just like that :)">
+      blue outlines
+    </span>
+    &nbsp;&nbsp;for more information.)
+  </div>
+  <div id="device_basics" class="device_grid_basics">
+    <span class="hoverable_element" data-toggle="tooltip" data-placement="bottom" data-html="true" title="Description: <%= device.description %><br/>Address unit bits: <%= device.address_unit_bits %><br/>Schema version: <%= device.schema_version %><br/>Version: <%= device.version %><br/>">
+      Name: 
+      <span id="device_name" class="device_grid_name"> 
+        <%= device.name %>
+      </span>
+    </span>
+  </div>
+  (Defaults, cpu info, peripherals TODO)
+</div>

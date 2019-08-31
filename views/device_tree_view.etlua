@@ -12,7 +12,7 @@
     Version: <%= device.version %>
   </div>
   <div id="device_address_unit_bits" class="device_address_unit_bits list-group-item">
-    Address Unit bits: <%= device.address_unit_bits %>
+    Address unit bits: <%= device.address_unit_bits %>
   </div>
   <div id="device_defaults_lg" class="list-group-item device_view_header" data-toggle="collapse" href="#device_defaults_l" aria-expanded="false" aria-controls="device_defaults_l">
     Defaults:

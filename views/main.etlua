@@ -34,9 +34,8 @@
         } );
       }
       else if ( data.state == "done" ) {
+        $( "#main_view_panel" )[ 0 ].innerHTML = "(Fetching device JSON data, please wait...)";
         if ( viz_type == "tree" ) {
-          new_html += "(Fetching device JSON data, please wait...)";
-          $( "#main_view_panel" )[ 0 ].innerHTML = new_html;
           $.get( "device_tree_html/" + device_id ).done( function( data ) {
             $( "#main_view_panel" )[ 0 ].innerHTML = data;
           } );
@@ -44,6 +43,9 @@
         else if ( viz_type == "grid" ) {
           $.get( "device_grid_html/" + device_id ).done( function( data ) {
             $( "#main_view_panel" )[ 0 ].innerHTML = data;
+            $( function() {
+              $( "[data-toggle=\"tooltip\"]" ).tooltip();
+            } );
           } );
         }
         else {

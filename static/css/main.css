@@ -146,3 +146,22 @@
 .lg_indent_fifth {
   padding-left: 100px;
 }
+
+.device_grid_notice {
+  text-align: center;
+  padding: 5px 0px 15px 0px;
+}
+
+.hoverable_element {
+  padding: 3px;
+  border: 2px solid blue;
+}
+
+.device_grid_basics {
+  text-align: center;
+}
+
+.device_grid_name {
+  font-weight: bold;
+  font-size: 16px;
+}
