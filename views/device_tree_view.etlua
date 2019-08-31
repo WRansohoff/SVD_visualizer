@@ -61,7 +61,7 @@
     </div>
     <div id="device_periph_<%= per.name %>_l" class="collapse lg_indent_once">
       <div class="list-group-item">
-        Base address: <%= per.base_address %>
+        Base address: <%= "0x" .. string.format( "%08X", per.base_address ) %>
       </div>
       <% if per.derived_from then %>
       <% else %>
@@ -116,10 +116,14 @@
             </div>
             <div id="device_register_<%= per.name %><%= reg.Single.name %>_l" class="collapse lg_indent_thrice">
               <div class="list-group-item">
-                Address offset: <%= reg.Single.address_offset %>
+                <% if reg.Single.address_offset > 255 then %>
+                  Address offset: <%= "0x" .. string.format( "%04X", reg.Single.address_offset ) %>
+                <% else %>
+                  Address offset: <%= "0x" .. string.format( "%02X", reg.Single.address_offset ) %>
+                <% end %>
               </div>
               <div class="list-group-item">
-                Reset value: <%= reg.Single.reset_value %>
+                Reset value: <%= "0x" .. string.format( "%08X", reg.Single.reset_value ) %>
               </div>
               <div class="list-group-item">
                 Size: <%= reg.Single.size %>
