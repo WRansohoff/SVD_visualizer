@@ -46,6 +46,19 @@
             $( function() {
               $( "[data-toggle=\"tooltip\"]" ).tooltip();
             } );
+            $( ".device_grid_periph_button" ).on( "click", function( e ) {
+              $( ".device_grid_periph_button" ).each( function() {
+                $( this ).removeClass( "btn-success" );
+                $( this ).addClass( "btn-info" );
+              } );
+              e.target.classList.remove( "btn-info" );
+              e.target.classList.add( "btn-success" );
+            } );
+            $( ".collapse" ).on( "show.bs.collapse", function() {
+              $( ".collapse.in" ).each( function() {
+                $( this ).collapse( "hide" );
+              } );
+            } );
           } );
         }
         else {

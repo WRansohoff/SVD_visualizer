@@ -70,6 +70,18 @@
   overflow: scroll;
 }
 
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
 .device_sidebar_row {
   display: block;
   margin: 2px auto 2px auto;
@@ -149,7 +161,7 @@
 
 .device_grid_notice {
   text-align: center;
-  padding: 5px 0px 15px 0px;
+  padding: 3px 0px 7px 0px;
 }
 
 .hoverable_element {
@@ -157,11 +169,38 @@
   border: 2px solid blue;
 }
 
-.device_grid_basics {
+.device_basics_table {
+  width: 100%;
+  margin-bottom: 3px;
+}
+
+.device_grid_basics_cell {
+  width: 33%;
+}
+
+.device_grid_attr {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.device_grid_banner {
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  border-top: 1px solid grey;
+}
+
+.device_grid_periph_container {
+  display: flow;
   text-align: center;
 }
 
-.device_grid_name {
-  font-weight: bold;
-  font-size: 16px;
+.device_grid_periph_button {
+  margin: 0px 2px 5px 2px !important;
+}
+
+.device_grid_periph_collapse {
+}
+
+.device_grid_periph_table {
 }
