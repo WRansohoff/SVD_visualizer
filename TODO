@@ -1,0 +1,6 @@
+* General cleanup, especially javascript.
+* Merge lua app methods/routes where appropriate.
+* Add more comments.
+* Add logic to support 'derived_from' peripherals.
+* Refactor the grid view's register bitfield rendering algorithm so that 'Reserved' fields can be merged together.
+* Split up some of the more egregious run-on lines, especially in the views.
