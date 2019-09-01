@@ -36,12 +36,12 @@
       else if ( data.state == "done" ) {
         $( "#main_view_panel" )[ 0 ].innerHTML = "(Fetching device JSON data, please wait...)";
         if ( viz_type == "tree" ) {
-          $.get( "device_tree_html/" + device_id ).done( function( data ) {
+          $.get( "device_html/" + device_id + "/tree" ).done( function( data ) {
             $( "#main_view_panel" )[ 0 ].innerHTML = data;
           } );
         }
         else if ( viz_type == "grid" ) {
-          $.get( "device_grid_html/" + device_id ).done( function( data ) {
+          $.get( "device_html/" + device_id + "/grid" ).done( function( data ) {
             $( "#main_view_panel" )[ 0 ].innerHTML = data;
             $( function() {
               $( "[data-toggle=\"tooltip\"]" ).tooltip();

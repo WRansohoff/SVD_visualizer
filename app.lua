@@ -127,7 +127,7 @@ app:get( "/device_json/:id" , function( self )
   return { status = 200, json = json_j }
 end)
 
-app:get( "/device_tree_html/:id" , function( self )
+app:get( "/device_html/:id/:type" , function( self )
   local device_id = tonumber( self.params.id )
   local dev = Device:find( device_id )
   -- Open the JSON file.
@@ -144,30 +144,14 @@ app:get( "/device_tree_html/:id" , function( self )
   if not device then
     return { status = 500, json = { error = "Could not parse processed JSON file." } }
   end
-  -- Render the 'device_tree_view' page.
-  return { render = "device_tree_view" }
-end)
-
--- TODO: Merge this with the above method.
-app:get( "/device_grid_html/:id" , function( self )
-  local device_id = tonumber( self.params.id )
-  local dev = Device:find( device_id )
-  -- Open the JSON file.
-  local json_f = io.open( "static/devices/" .. device_id .. "/" .. device_id .. ".json", 'r' )
-  -- (Ensure that the file exists)
-  if not json_f then
-    return { status = 404, json = { error = "Could not find processed JSON file." } }
+  -- Render the requested device HTML.
+  if self.params.type == 'tree' then
+    return { render = "device_tree_view" }
+  elseif self.params.type == 'grid' then
+    return { render = "device_grid_view" }
+  else
+    return { status = 404, json = { error = "Unrecognized view type." } }
   end
-  -- Read the file.
-  local json_str = json_f:read( "*all" )
-  json_f:close()
-  -- Parse it into JSON.
-  device = json.decode( json_str )
-  if not device then
-    return { status = 500, json = { error = "Could not parse processed JSON file." } }
-  end
-  -- Render the 'device_grid_view' page.
-  return { render = "device_grid_view" }
 end)
 
 return app
